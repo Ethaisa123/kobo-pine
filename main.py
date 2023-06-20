@@ -7,7 +7,6 @@ vol_folder = Title + "_volumes"
 os.chdir("../kobo-pine")
 os.mkdir(vol_folder)
 
-print(volumes)
 if sum(volumes) == 0:
     os.chdir(chap_pdf_location)
     result_1 = fitz.open()
@@ -32,6 +31,7 @@ for i in range (0,max(volumes)):
     os.chdir("../../..")
     os.chdir(vol_folder)
     result_1.save("Volume_{}.pdf".format(i + 1))
+print("Volumes_condensed [/]")
 print("finished normaly")
 os.chdir("..")
 shutil.rmtree(folder)

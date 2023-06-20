@@ -18,6 +18,7 @@ volumes = []
 chapter_folders = os.listdir(folder_2_location)
 chapter_folders.remove("cover.jpg")
 chapter_folders.remove("download.db")
+print("file_system [/]")
 #_________________________________________________________
 os.mkdir(folder_2_location + "\\{}_chapters" .format(Title))
 chap_pdf_location = (folder_2_location + "\\{}_chapters" .format(Title))
@@ -52,10 +53,7 @@ chap_dict = {}
 
 for i in range (0, len(chap_premerge)):
     chap_dict[chap_premerge[i]] = chap_premerge[i].split(".")[1]
-print(chap_dict)
-print(volumes)
-print(chap_pdf_location)
-
+print("chapters_sorted [/]")
 
 """
 os.chdir(chap_pdf_location)

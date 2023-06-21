@@ -13,6 +13,8 @@ main_dirct = os.getcwd()
 if sum(volumes) == 0:
     if input("Do you want to add all chapters into a single file? (y/n) :  ") == "n":
         shutil.move(chap_pdf_location, main_dirct)
+        shutil.rmtree(folder)
+        shutil.rmtree(vol_folder)
         exit()
     os.chdir(main_dirct)
     os.chdir(chap_pdf_location)

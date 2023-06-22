@@ -54,7 +54,7 @@ for i in range (0,max(volumes)):
             result_1.insert_pdf(mfile)
     os.chdir(main_dirct)
     os.chdir(vol_folder)
-    result_1.save("Volume_{}.pdf".format(i + 1))
+    result_1.save("{}_Vol.{}.pdf".format(Title, i + 1))
 
 print("Volumes_condensed [/]")
 print("finished normaly")

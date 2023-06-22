@@ -29,7 +29,7 @@ except:
     else:
         shutil.rmtree(folder)
         exit()
-#this api made avalibel by mansuf is a lifesaver please check his github it is amazing https://github.com/mansuf/mangadex-downloader
+#this api made avalible by mansuf is a lifesaver please check his github it is amazing https://github.com/mansuf/mangadex-downloader
 """
 when mangadex-dl downloads a manga it sorts each chapter into a file named "[TRANSLATOR] ch. vol."
 in this file is a number of images from the chapter labled as the page_number.png/jpg

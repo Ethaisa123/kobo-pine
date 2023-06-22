@@ -26,18 +26,19 @@ chap_pdf_location = (folder_2_location + "\\{}_chapters" .format(Title))
 for i in range (0, (len(chapter_folders))  ):
     chap_folder_locaion = (folder_2_location + "\\{}".format(chapter_folders[i]))
     (os.listdir(chap_folder_locaion))
-    #shutil.copy(folder_2_location + "\\cover.jpg", chap_folder_locaion + "\\0.jpg")
     images = [
     Image.open(chap_folder_locaion + "\\" + f).convert('RGB')
     for f in os.listdir(chap_folder_locaion)]
     vol = ""
-
+    str = chapter_folders[i]
     if "Vol." in chapter_folders[i]:
-        str = chapter_folders[i]
         new_str = (str.split("Vol.",1)[1])
         volumes.append(int(new_str.split()[0]))
         vol = ( "_vol.{}" .format(new_str.split()[0]))
-    pdf_path = chap_pdf_location + ("\\{}_Chapter_{}{}.pdf" .format(Title, i+1,vol))
+    if "Ch." in chapter_folders[i]:
+        curr_chapter = (str.split("Ch.",1)[1])
+        curr_chapter = curr_chapter.strip()
+    pdf_path = chap_pdf_location + ("\\{}_Chapter_{}{}.pdf" .format(Title, curr_chapter,vol))
     try:
         images[0].save(pdf_path, "PDF" ,resolution=100.0, save_all=True, append_images=images[1:])
     except:

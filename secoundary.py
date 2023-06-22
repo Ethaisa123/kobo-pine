@@ -23,7 +23,7 @@ try:
     os.mkdir(folder)
 except:
     print("     : Manga already exists! [X]")
-    if input("     : Overwrite? (y/n)\n     :  ") != ("y" or "Y"):
+    if input("     : Overwrite? (y/n)\n     : ") == ("y" or "Y"):
         shutil.rmtree(folder)
         os.mkdir(folder)
     else:
@@ -49,9 +49,9 @@ volumes = []
 chapter_folders = os.listdir(folder_2_location)
 
 #copies the cover into the first chapter (so that the thumbnail will look nicer) also removes the extra files
-shutil.copyfile(folder_2_location + "\\cover.jpg", (folder_2_location + "\\{}\\cover.jpg".format(chapter_folders[-1])))
 chapter_folders.remove("cover.jpg")
 chapter_folders.remove("download.db")
+shutil.copyfile(folder_2_location + "\\cover.jpg", (folder_2_location + "\\{}\\cover.jpg".format(chapter_folders[0])))
 print("file_system [/]")
 #creates the chapters folder for all of the chapter pdfs to be stored (the next line stores where the folder is kept)
 os.mkdir(folder_2_location + "\\{}_chapters" .format(Title))
@@ -60,18 +60,18 @@ chap_pdf_location = (folder_2_location + "\\{}_chapters" .format(Title))
 this massive for-loops job is to go through every chapter folder and combine all of the images
 into a pdf, the pdfs are saved to the TITLE_chapters folder
 """
-for i in range (0, (len(chapter_folders))  ):
+for i in range (0, (len(chapter_folders))):
     #stores the location of where the output file will be saved
     chap_folder_locaion = (folder_2_location + "\\{}".format(chapter_folders[i]))
     #the image_list variable is a replacement for os.listdir(chap_folderlocation) so that 
     # i can add or remove the cover image for a given chapter
     image_list = os.listdir(chap_folder_locaion)
-    image_list.remove("cover.jpg")
+    if "cover.jpg" in image_list:
+        image_list.remove("cover.jpg")
     #if the volume and the chapter are both 1 it adds the cover to it (also if it is a oneshot)
     # this is just incase the first page is a translator page 
-    if "Vol." in chapter_folders[i]:
-        if chapter_folders[i].split("Vol.",1)[1] == 1 and chapter_folders[i].split("Ch.",1)[1] == 1:
-            image_list.insert(0, "cover.jpg")
+    if "Vol. 1 Ch. 1" in chapter_folders[i]:
+        image_list.insert(0, "cover.jpg")
     elif "Oneshot" in chapter_folders[i]:
         image_list.insert(0, "cover.jpg")
     #this opens all of the images from the chapter folder into a list and then converts them 
@@ -85,7 +85,7 @@ for i in range (0, (len(chapter_folders))  ):
     if "Vol." in chapter_folders[i]:
         new_str = (str.split("Vol.",1)[1])
         volumes.append(int(new_str.split()[0]))
-        vol = ( "_vol.{}" .format(new_str.split()[0]))
+        vol = ( "vol.{}" .format(new_str.split()[0]))
     #sets the chapter to the actual chapter not the placement in the list
     if "Ch." in chapter_folders[i]:
         curr_chapter = (str.split("Ch.",1)[1])
@@ -119,9 +119,9 @@ chap_dict = {}
 #sets the chapt dict to help mark which chapters merge into what volume
 for i in range (0, len(chap_premerge)):
     try:
-        chap_dict[chap_premerge[i]] = chap_premerge[i].split("_vol.")[1]
+        chap_dict[chap_premerge[i]] = (chap_premerge[i].split("vol.")[1].strip(".pdf"))
     except IndexError:
-        print("volume not found when sorting [-]")
+        print("volume not found when sorting [{}]".format(i - 1))
         chap_dict[chap_premerge[i]] = 0
 print("chapters_sorted [/]")
 #creates a data file incase of a crash (bug testing purposes)

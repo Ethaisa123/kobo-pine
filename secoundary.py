@@ -51,6 +51,8 @@ chapter_folders = os.listdir(folder_2_location)
 #copies the cover into the first chapter (so that the thumbnail will look nicer) also removes the extra files
 chapter_folders.remove("cover.jpg")
 chapter_folders.remove("download.db")
+print(chapter_folders)
+chapter_folders.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
 shutil.copyfile(folder_2_location + "\\cover.jpg", (folder_2_location + "\\{}\\cover.jpg".format(chapter_folders[0])))
 print("file_system [/]")
 #creates the chapters folder for all of the chapter pdfs to be stored (the next line stores where the folder is kept)
@@ -71,7 +73,8 @@ for i in range (0, (len(chapter_folders))):
     #if the volume and the chapter are both 1 it adds the cover to it (also if it is a oneshot)
     # this is just incase the first page is a translator page 
     if "Vol. 1 Ch. 1" in chapter_folders[i]:
-        image_list.insert(0, "cover.jpg")
+        if (chapter_folders[i].split("Vol. 1 Ch. 1")[1] == "") == True:
+            image_list.insert(0, "cover.jpg")
     elif "Oneshot" in chapter_folders[i]:
         image_list.insert(0, "cover.jpg")
     #this opens all of the images from the chapter folder into a list and then converts them 
@@ -121,8 +124,11 @@ for i in range (0, len(chap_premerge)):
     try:
         chap_dict[chap_premerge[i]] = (chap_premerge[i].split("vol.")[1].strip(".pdf"))
     except IndexError:
-        print("volume not found when sorting [{}]".format(i - 1))
-        chap_dict[chap_premerge[i]] = 0
+        print("volume not found when sorting [{}]".format(chap_premerge[i]))
+        volumes.append(0)
+        chap_dict[chap_premerge[i]] = "0"
+#makes sure volumes list only has intagers
+volumes = list(map(int, volumes))
 print("chapters_sorted [/]")
 #creates a data file incase of a crash (bug testing purposes)
 with open(folder_2_location + "\\Data.py", 'w') as f:

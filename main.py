@@ -2,7 +2,7 @@ import os
 import shutil
 from secoundary import volumes, chap_dict, chap_pdf_location, Title, chap_premerge, folder, oneshot_, folder_2_location
 import fitz
-Title = folder_2_location.split("\\")[0]
+Title = folder_2_location.split("\\")[1]
 vol_folder = Title + " Volumes"
 #creates a folder for the volumes in the main directory (if there alread is one it deletes it)
 try:

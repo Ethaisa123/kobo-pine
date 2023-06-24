@@ -48,11 +48,17 @@ volumes = []
 #this variable stores the names of all the folders that contain the chapter images
 chapter_folders = os.listdir(folder_2_location)
 
-#copies the cover into the first chapter (so that the thumbnail will look nicer) also removes the extra files
+#removes the cover from the list of folders
 chapter_folders.remove("cover.jpg")
 chapter_folders.remove("download.db")
-print(chapter_folders)
-chapter_folders.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
+#adds the first chapter to the start of the list (also works with oneshots)
+if chapter_folders[0].split(']')[0] + '] Oneshot' in chapter_folders:
+    Oneshot_folder = chapter_folders[0].split(']')[0] + '] Oneshot'
+    chapter_folders.remove(Oneshot_folder)
+    chapter_folders.insert(0, Oneshot_folder)
+else:
+    chapter_folders.sort(key=lambda x: int(''.join(filter(str.isdigit, x))))
+#adds the cover to the first file in the list (the 1st chapter or the oneshot) (this might be replaced code if i get epub working)
 shutil.copyfile(folder_2_location + "\\cover.jpg", (folder_2_location + "\\{}\\cover.jpg".format(chapter_folders[0])))
 print("file_system [/]")
 #creates the chapters folder for all of the chapter pdfs to be stored (the next line stores where the folder is kept)

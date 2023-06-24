@@ -16,8 +16,9 @@ main_dirct = os.getcwd()
 #if the manga itself is detected as a single oneshot, it doesnt merge anything and adds the oneshot chapter to the volumes folder
 if oneshot_ == True:
     os.chdir(main_dirct)
-    print(chap_pdf_location + ("\\{}_Oneshot.pdf" .format(Title)))
-    shutil.move(chap_pdf_location + ("\\{}_Oneshot.pdf" .format(Title)), vol_folder)
+    print(chap_pdf_location + ("\\{}_Oneshot.pdf" .format(chap_pdf_location.split("_raws")[0])))
+    print(chap_pdf_location)
+    shutil.move(chap_pdf_location + ("\\{}_Oneshot.pdf" .format(chap_pdf_location.split("_raws")[0])), vol_folder)
     print("Condensing chapters [/]")
     print("Oneshot detected, finished normaly [/]")
     os.chdir(main_dirct)

@@ -46,4 +46,42 @@ for i in range (0, len(os.listdir(dir_title))):
         os.replace(dir_title + "\\" + list[i], "{}\\{} {}".format(dir_title,  dir_title, list[i]))
     else:
         print("     > Directory '{}' already named".format(list[i]))
+
+if input("    > Add metadata? (y/n):\n     >") != "y":
+    print("     > Done!")
+else:
+    from PyPDF2 import PdfReader, PdfWriter
+    import json
+    hearders = {'headers':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0'}
+    author_url =  "https://api.mangadex.org/author/" + [manga["relationships"][0]["id"] for manga in r.json()["data"]][0]
+    n = requests.get(author_url, headers=hearders)
+    al = n.text
+    author_dict = (json.loads('{"' + al[al.find('<body>') + 7 : al.find('</body>')] + "}"))
+    author = (author_dict['data']['attributes']['name'])
+    tags = r.json()["data"][0]['attributes']["tags"][0]['attributes']['name']['en']
+    files = os.listdir(dir_title)
+
+    directory = os.getcwd()
+    for f in files:
+        reader = PdfReader(dir_title + "\\" + f)
+        writer = PdfWriter()
+        # Add all pages to the writer
+        for page in reader.pages:
+            writer.add_page(page)
+
+        # Add the metadata
+        writer.add_metadata(
+            {
+                "/Title": f,
+                "/Author": author,
+                "/Subject": tags,
+                "/Keywords": f.split(" Vol.")[0],
+            }
+        )
+
+        # Save the new PDF to a file
+        os.chdir(dir_title)
+        with open(f, "wb") as f:
+            writer.write(f)
+        os.chdir(directory)
 print("     > Done!")

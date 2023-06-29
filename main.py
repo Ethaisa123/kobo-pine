@@ -48,7 +48,7 @@ for i in range (0, len(os.listdir(dir_title))):
         print("     > Directory '{}' already named".format(list[i]))
 
 if input("    > Add metadata? (y/n):\n     >") != "y":
-    print("     > Done!")
+    input("     > Done! \n     > press enter to exit...")
 else:
     from PyPDF2 import PdfReader, PdfWriter
     import json
@@ -84,4 +84,5 @@ else:
         with open(f, "wb") as f:
             writer.write(f)
         os.chdir(directory)
-print("     > Done!")
+print("     > metadata:\n     > Title: {}\n     > Author {}\n     > Main Tag: {}".format(title, author, tags))
+input("     > Done! \n     > press enter to exit...")

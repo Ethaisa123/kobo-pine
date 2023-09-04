@@ -47,42 +47,53 @@ for i in range (0, len(os.listdir(dir_title))):
     else:
         print("     > Directory '{}' already named".format(list[i]))
 
-if input("    > Add metadata? (y/n):\n     >") != "y":
+if input("     > Add metadata? (y/n):\n     >") != "y":
     input("     > Done! \n     > press enter to exit...")
 else:
     from PyPDF2 import PdfReader, PdfWriter
     import json
+    base_url = "https://api.mangadex.org"
+    r = requests.get(f"{base_url}/manga",params={"title": dir_title})
     hearders = {'headers':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0'}
-    author_url =  "https://api.mangadex.org/author/" + [manga["relationships"][0]["id"] for manga in r.json()["data"]][0]
+    author_url =  "https://api.mangadex.org/author/" + r.json()['data'][0]["relationships"][0]["id"]
     n = requests.get(author_url, headers=hearders)
     al = n.text
     author_dict = (json.loads('{"' + al[al.find('<body>') + 7 : al.find('</body>')] + "}"))
+    
     author = (author_dict['data']['attributes']['name'])
-    tags = r.json()["data"][0]['attributes']["tags"][0]['attributes']['name']['en']
+    tags = []
+    for i in r.json()["data"][0]["attributes"]["tags"]:
+        tags.append(i["attributes"]["name"]["en"])    
     files = os.listdir(dir_title)
 
     directory = os.getcwd()
+    
     for f in files:
-        reader = PdfReader(dir_title + "\\" + f)
-        writer = PdfWriter()
-        # Add all pages to the writer
-        for page in reader.pages:
-            writer.add_page(page)
+        try:
+            reader = PdfReader(dir_title + "\\" + f)
+            writer = PdfWriter()
+            # Add all pages to the writer
+            for page in reader.pages:
+                writer.add_page(page)
 
-        # Add the metadata
-        writer.add_metadata(
-            {
-                "/Title": f,
-                "/Author": author,
-                "/Subject": tags,
-                "/Keywords": f.split(" Vol.")[0],
-            }
-        )
+            # Add the metadata
+            writer.add_metadata(
+                {
+                    "/Title": f,
+                    "/Author": author,
+                    "/Subject": str(tags),
+                    "/Keywords": f.split(" Vol.")[0],
+                }
+            )
 
-        # Save the new PDF to a file
-        os.chdir(dir_title)
-        with open(f, "wb") as f:
-            writer.write(f)
-        os.chdir(directory)
-print("     > metadata:\n     > Title: {}\n     > Author {}\n     > Main Tag: {}".format(title, author, tags))
+            # Save the new PDF to a file
+            os.chdir(dir_title)
+            with open(f, "wb") as f:
+                writer.write(f)
+            os.chdir(directory)
+            print("     > added metadata to volume {}".format(f))
+        except:
+            print("     > volume {} failed to write metadata".format(f))
+    
+print("     > metadata:\n     > Title: {}\n     > Author {}\n     > Main Tag: {}".format(dir_title, author, tags))
 input("     > Done! \n     > press enter to exit...")

@@ -12,7 +12,7 @@ for curr_manga in new_manga:
         os.remove(dir_title + "\\cover.jpg")
         os.remove(dir_title + "\\download.db")
     except FileNotFoundError:
-        print("     >file already cleaned")
+        print("     > file already cleaned")
 
     list = os.listdir(dir_title)
 
@@ -21,11 +21,11 @@ for curr_manga in new_manga:
             os.replace(dir_title + "\\" + list[i], "{}\\{} {}".format(dir_title,  dir_title, list[i]))
         else:
             print("     > Directory '{}' already named".format(list[i]))
-    #metadata
+    #get metadata
     from PyPDF2 import PdfReader, PdfWriter
     import json
     base_url = "https://api.mangadex.org"
-    r = requests.get(f"{base_url}/manga",params={"title": dir_title})
+    r = requests.get(f"{base_url}/manga",params={"title": dir_title}) # finds the mangas url
     hearders = {'headers':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:51.0) Gecko/20100101 Firefox/51.0'}
     author_url =  "https://api.mangadex.org/author/" + r.json()['data'][0]["relationships"][0]["id"]
     n = requests.get(author_url, headers=hearders)

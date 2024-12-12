@@ -1,5 +1,5 @@
 from art import *
-import os
+import os, sys
 #libraries, os, requests, colorama, art 
 dir_path = os.path.dirname(os.path.realpath(__file__))
 print(dir_path)
@@ -12,6 +12,8 @@ print("     > would you like to (1) download a single manga or (2) download mang
 print("     > mangadex lists may take up to an hour to update after created or edited")
 ans = input("{}" .format("    > "))
 if ans == "1":
-    exec(open("C:/Users/Ethan/Documents/GitHub/kobo-pine/manga_dld.py").read())
+    filename = os.path.join(os.path.dirname(sys.executable), 'manga_dld.py')
+    exec(open(filename).read())
 elif ans == "2":
-    exec(open("./manga_list_dld.py").read())
+    filename = os.path.join(os.path.dirname(sys.executable), 'manga_list_dld.py')
+    exec(open(filename).read())
